@@ -27,7 +27,7 @@ function App() {
         {
           degree: "B.Tech in Computer Science & Engineering (CSE)",
           institution: "Charusat University",
-          period: "2023 - Present"
+          period: "2026 - Present"
         }
       ]
     },

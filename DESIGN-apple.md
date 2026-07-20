@@ -271,6 +271,44 @@ components:
     textColor: "{colors.ink-muted-80}"
     typography: "{typography.fine-print}"
     padding: 64px
+  calendar-scheduler-genius:
+    backgroundColor: "{colors.canvas}"
+    borderColor: "{colors.hairline}"
+    rounded: "{rounded.lg}"
+    padding: 24px
+  imessage-bubble-outbound:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.body-on-dark}"
+    rounded: "{rounded.lg}"
+    padding: 12px 16px
+  imessage-bubble-inbound:
+    backgroundColor: "{colors.canvas-parchment}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
+    padding: 12px 16px
+  form-input-field:
+    backgroundColor: "{colors.canvas}"
+    borderColor: "{colors.hairline}"
+    rounded: "{rounded.sm}"
+    height: 44px
+    padding: 12px 16px
+  facetime-control-dock:
+    backgroundColor: "rgba(29, 29, 31, 0.72)"
+    rounded: "{rounded.pill}"
+    height: 64px
+    padding: 12px 24px
+  facetime-video-tile:
+    rounded: "{rounded.lg}"
+    backgroundColor: "{colors.surface-tile-3}"
+  appstore-review-card:
+    backgroundColor: "{colors.canvas-parchment}"
+    rounded: "{rounded.lg}"
+    padding: 20px
+  push-notification-toast:
+    backgroundColor: "rgba(255, 255, 255, 0.8)"
+    borderColor: "rgba(255, 255, 255, 0.4)"
+    rounded: "{rounded.lg}"
+    padding: 16px 20px
 ---
 
 ## Overview
@@ -507,6 +545,47 @@ Error and validation states were not surfaced in the analyzed pages.
 - Don't mix radii grammars — use `{rounded.sm}` for compact utility, `{rounded.lg}` for utility cards, `{rounded.pill}` for pills, and nothing in between (except the rare `{rounded.md}` Pearl Button).
 - Don't use `{colors.primary-on-dark}` (Sky Link Blue) on light surfaces — it's the dark-tile-only variant. Action Blue is for light surfaces.
 
+## Socrates Page Layouts & Structural Inventory
+
+To build the **Socrates** platform using this design system, layout structures for the core pages are mapped directly to these component hierarchies:
+
+### 1. Landing & Home Page (`page.home`)
+* **Layout**: A vertical stack of full-bleed product tiles with 0px margins.
+  * **Global Header**: Pinned `{component.global-nav}` (black) + `{component.sub-nav-frosted}`.
+  * **Hero Section**: `{component.product-tile-light}`. Displays a bold, centered headline ("Learn from the source.") in `{typography.hero-display}`, a simple description, and two Action Blue pill CTAs ("Find a Tutor" / "Become a Tutor").
+  * **Alternating Grid**: Alternates between `{component.product-tile-dark}` (presenting high-tech categories like Software Engineering or Mathematics) and `{component.product-tile-parchment}` (showcasing student success stories or tutor testimonials).
+  * **AI Assistant Feature Highlight**: `{component.product-tile-light}` centering a portrait of the AI Tutoring Assistant interface with a `{component.button-primary}` ("Try AI Tutor").
+
+### 2. Tutor Search & Discovery (`page.search`)
+* **Layout**: A clean, split-screen or search-centric canvas.
+  * **Header**: Pinned `{component.global-nav}` with a secondary search sub-header containing `{component.search-input}`.
+  * **Sidebar Filters**: A left-hand vertical filter pane using transparent background, thin dividers, and `{component.configurator-option-chip}` elements to toggle price ranges, ratings, and tutor availability.
+  * **Results Grid**: A 3-4 column grid of `{component.store-utility-card}` items representing tutor listings. Cards feature a 1:1 circular tutor avatar with `{rounded.sm}` margins and a `{component.text-link}` ("View Profile") in Action Blue.
+
+### 3. Tutor Profile Page (`page.tutor-profile`)
+* **Layout**: Pinned sub-navigation with alternating content layers.
+  * **Sticky sub-header**: `{component.sub-nav-frosted}` featuring the tutor's name and average rating on the left, and their hourly rate (e.g. "$40/hr") plus a persistent `{component.button-primary}` ("Book a Session") on the right.
+  * **Hero Showcase**: A light tile showcasing the tutor's primary introduction. Includes a transparent WebP portrait with `product-shadow`, background credentials in `{typography.lead}`, and subjects.
+  * **Scheduler Section**: Pinned `{component.calendar-scheduler-genius}` for slots selection.
+  * **Reviews Section**: A centered column displaying tutor feedback utilizing `{component.appstore-review-card}` with nested white review comments.
+
+### 4. Student & Tutor Dashboards (`page.dashboard`)
+* **Layout**: A structured two-column layout.
+  * **Sidebar Navigation**: Width 240px, background `{colors.canvas-parchment}` (#f5f5f7), with vertical navigation links in `{typography.nav-link}`. Pinned flat to the left with a 1px solid `{colors.hairline}` border.
+  * **Main Content Area**: Background `{colors.canvas}` (white). Metrics (upcoming sessions, tutor earnings, total hours) are styled as flat widgets matching `{component.store-utility-card}` specifications (rounded corners, hairline border, whitespace-dominant text).
+
+### 5. Chat & Messenger (`page.chat`)
+* **Layout**: A vertical chat terminal occupying the viewport height minus navigation.
+  * **Left Sidebar (Threads)**: List of conversations. Background `{colors.canvas-parchment}`, width 320px, borders `{colors.hairline}`. Active thread highlighted by a subtle white background card.
+  * **Right Panel (Conversation)**: Background `{colors.canvas}`. Messages flow in a vertical column using `{component.imessage-bubble-inbound}` (left-aligned grey bubble next to avatar) and `{component.imessage-bubble-outbound}` (right-aligned blue bubble).
+  * **Message Input**: Pinned at the bottom inside a `{component.search-input}` wrapper extending to full container width.
+
+### 6. FaceTime Virtual Classroom (`page.classroom`)
+* **Layout**: Full-screen video interface with minimal, floating UI controls.
+  * **Main Viewport**: Full-bleed Jitsi feed mapped to `{component.facetime-video-tile}` showing the tutor's shared canvas.
+  * **Self-View**: Pinned PIP window in `{component.facetime-video-tile}` (9:16 aspect ratio, rounded corners) floating in the corner.
+  * **Control Panel**: Pinned `{component.facetime-control-dock}` floating at the bottom center, containing 44px circular control chips to toggle audio, video, screen share, and leave the session.
+
 ## Responsive Behavior
 
 ### Breakpoints
@@ -560,3 +639,68 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 - Dark-mode counterparts for store and accessories utility cards were not surfaced on the analyzed pages; the system documented is the daytime/light-dominant variant Apple ships by default.
 - Atmospheric photography (environment page mountain vista) is a content asset, not a design token; the documented `{component.environment-quote-card}` describes the structural surface only.
 - The exact backdrop-filter blur radius on `{component.sub-nav-frosted}` and `{component.floating-sticky-bar}` is platform-dependent; production CSS uses `saturate(180%) blur(20px)` as a typical baseline but the value isn't formalized as a token.
+
+## Additional System Components (Marketplace Specifications)
+
+To complete the design system for **Socrates**, the following components are defined using the exact same Apple structural, tokenized design chassis (flat UI chrome, Action Blue accents, high typographic contrast, and zero decorative gradients).
+
+### 1. Calendar & Slot Scheduler (`calendar-scheduler-genius`)
+*Inspired by the Apple Genius Bar appointment interface. Flat, highly structured, and whitespace-dominant.*
+* **Structure**: A card container in `{colors.canvas}` with a 1px solid `{colors.hairline}` border and `{rounded.lg}` (18px) corners.
+* **Layout**:
+  * **Header**: Pinned month/year title in `{typography.body-strong}` (17px / 600) with simple chevron chevron navigation controls using `{component.button-icon-circular}` scaled down to 32px.
+  * **Day Slider**: A horizontal row of date chips. Each chip displays a day label (e.g. "Mon") in `{typography.caption}` and date (e.g. "18") in `{typography.body-strong}`. 
+    * *Default State*: Transparent background, text in `{colors.ink}`.
+    * *Selected State*: Background `{colors.ink}` (near-black), text `{colors.body-on-dark}` (white).
+    * *Hover State*: Background `{colors.canvas-parchment}`, cursor-pointer.
+  * **Time Grid**: Time slots are laid out as an array of configurator option chips (`{component.configurator-option-chip}`). If a slot is booked, the chip is hidden or set to `{colors.ink-muted-48}` text with a disabled cursor, bypassing the need for decorative "blocked" states.
+  * **Padding**: Internal wrapper padding `{spacing.lg}` (24px) for spacing.
+
+### 2. Live Chat Bubbles (`imessage-bubble`)
+*Inspired by the iOS Messages app. Flat shapes with dynamic rounded corners and high readability.*
+* **Outbound Bubbles (`imessage-bubble-outbound`)**:
+  * **Background**: `{colors.primary}` (Action Blue #0066cc).
+  * **Typography**: `{colors.body-on-dark}` (white text) in `{typography.body}` (17px).
+  * **Geometry**: Rounded `{rounded.lg}` (18px) corners, except for the bottom-right corner which is sharp (5px radius) to indicate direction.
+  * **Padding**: 12px vertical, 16px horizontal.
+* **Inbound Bubbles (`imessage-bubble-inbound`)**:
+  * **Background**: `{colors.canvas-parchment}` (off-white #f5f5f7).
+  * **Typography**: `{colors.ink}` (near-black #1d1d1f) in `{typography.body}` (17px).
+  * **Geometry**: Rounded `{rounded.lg}` (18px) corners, with the bottom-left corner set to 5px radius.
+  * **Padding**: 12px vertical, 16px horizontal.
+* **Alignment**: Conversations sit in a single vertical column. Outbound bubbles align right with a 2px gap between consecutive bubbles; inbound bubbles align left next to a 32 × 32px circular avatar (`{rounded.full}`) of the tutor.
+
+### 3. Form Input Fields (`form-input-field`)
+*Inspired by Apple ID sign-in fields. Minimal, outline-only inputs that maximize interactive clarity.*
+* **Structure**: A rectangular input bar with background `{colors.canvas}`, height 44px, rounded `{rounded.sm}` (8px), and a 1px solid `{colors.hairline}` border.
+* **Typographic Hierarchy**:
+  * **Label**: Pinned exactly 6px above the input field in `{typography.caption-strong}` (14px / 600) with color `{colors.ink-muted-48}` (gray #7a7a7a).
+  * **Value / Placeholder**: Text input in `{typography.body}` (17px). Placeholder uses `{colors.ink-muted-48}`.
+* **States**:
+  * **Default**: Hairline border.
+  * **Focus**: The border upgrades to 2px solid `{colors.primary-focus}` (#0071e3). **No outer shadows or glows** are applied; focus is strictly defined by outline weight and color contrast.
+  * **Error**: The border turns 1.5px solid `{colors.primary}` (danger red equivalent, in Apple's case `#ff3b30`), and an error description sits exactly 4px below in `{typography.fine-print}` in red.
+
+### 4. FaceTime Video Grid (`facetime-video-grid`)
+*Inspired by macOS FaceTime layouts. UI chrome recedes completely, using edge-to-edge video feeds and floating translucent control panels.*
+* **Remote Stream Frame**: Pinned edge-to-edge as a full-bleed grid container (`{colors.surface-tile-3}`) to represent the other participant's screen.
+* **Local Self-View Tile (`facetime-video-tile`)**: Pinned as a floating picture-in-picture box in the top-right corner. Dimensions 120px × 180px, aspect-ratio 9:16, rounded `{rounded.lg}` (18px), resting on the remote stream background.
+* **Floating Control Dock (`facetime-control-dock`)**: Pinned horizontally, centered at the bottom of the screen.
+  * **Background**: `rgba(29, 29, 31, 0.72)` (Apple's translucent near-black ink) with a heavy `backdrop-filter: blur(20px)` and a soft 1px white hairline overlay.
+  * **Dimensions**: Height 64px, rounded `{rounded.pill}`, padding 12px × 24px.
+  * **Buttons**: Circular control buttons (`{component.button-icon-circular}`) with 44px size. Micro-scale interaction on active/press states. Mute and camera-off buttons toggle to background `#ff3b30` (red alert) when active, providing a clear state cue.
+
+### 5. Review & Rating Card (`appstore-review-card`)
+*Inspired by App Store rating cards. Soft parchment backings with flat visual histograms.*
+* **Card Base**: Background `{colors.canvas-parchment}` (#f5f5f7), rounded `{rounded.lg}` (18px), padding `{spacing.lg}` (24px).
+* **Grid Layout**:
+  * **Left Column (Summary)**: Large numerical rating in `{typography.hero-display}` (56px / 600), followed by 5 stars rendered in Action Blue `#0066cc` and a total count label in `{typography.fine-print}`.
+  * **Right Column (Histogram)**: Five horizontal bar charts. Bar track background `{colors.hairline}` (#e0e0e0), active fill bar in `{colors.ink}` (near-black). No gradients or shadows.
+* **Review Comments**: Individual comments are nested below in `{colors.canvas}` white cards. The comment title sits in `{typography.body-strong}` (17px / 600), body text in `{typography.caption}` (14px / 400), and rating stars at 14px size in Action Blue.
+
+### 6. Alert & Toast Banner (`push-notification-toast`)
+*Inspired by iOS push notifications. A floating translucent capsule that stands out via backdrop blur and soft depth.*
+* **Structure**: Pinned to the top-center of the viewport. Background `rgba(255, 255, 255, 0.8)` with `backdrop-filter: blur(20px)`, and a 1px solid `rgba(255, 255, 255, 0.4)` border.
+* **Elevation**: Soft drop shadow `rgba(0, 0, 0, 0.16) 0px 8px 24px` (the only UI shadow in the system, utilized to separate floating notifications from static tile content).
+* **Geometry**: Rounded `{rounded.lg}` (18px) corners, padding 16px × 20px.
+* **Content**: Title in `{typography.caption-strong}` (14px / 600), text description in `{typography.caption}` (14px / 400), right-aligned action link in `{colors.primary}` (Action Blue).
