@@ -671,6 +671,7 @@ To complete the design system for **Socrates**, the following components are def
 * **Alignment**: Conversations sit in a single vertical column. Outbound bubbles align right with a 2px gap between consecutive bubbles; inbound bubbles align left next to a 32 × 32px circular avatar (`{rounded.full}`) of the tutor.git commit -m "Your commit message here"
 
 
+
 ### 3. Form Input Fields (`form-input-field`)
 *Inspired by Apple ID sign-in fields. Minimal, outline-only inputs that maximize interactive clarity.*
 * **Structure**: A rectangular input bar with background `{colors.canvas}`, height 44px, rounded `{rounded.sm}` (8px), and a 1px solid `{colors.hairline}` border.
