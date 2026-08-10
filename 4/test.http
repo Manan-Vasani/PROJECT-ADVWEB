@@ -1,0 +1,58 @@
+### Practical 4: Task Manager RESTful API Test Requests
+
+@baseUrl = http://localhost:5000
+
+### 1. Root & Health Check (200 OK)
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. Read All Tasks (200 OK)
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### 3. Filter Tasks by Status (?completed=false)
+GET {{baseUrl}}/tasks?completed=false
+Accept: application/json
+
+### 4. Read Single Task by ID (200 OK)
+GET {{baseUrl}}/tasks/1
+Accept: application/json
+
+### 5. Create a New Task (201 Created)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Study Express Middleware",
+  "description": "Learn logging and error handler pipelines in Node.js",
+  "completed": false
+}
+
+### 6. Create Task Validation Failure (400 Bad Request)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "description": "Missing title should cause 400 Bad Request"
+}
+
+### 7. Update Task by ID (200 OK)
+PUT {{baseUrl}}/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Set up Node.js & Express Server (Done)",
+  "completed": true
+}
+
+### 8. Delete Task by ID (200 OK)
+DELETE {{baseUrl}}/tasks/2
+Accept: application/json
+
+### 9. Read Non-Existent Task (404 Not Found)
+GET {{baseUrl}}/tasks/9999
+Accept: application/json
+
+### 10. Test Global Error Handling Middleware (500 Internal Server Error)
+GET {{baseUrl}}/error-test
+Accept: application/json
