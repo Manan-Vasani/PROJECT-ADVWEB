@@ -57,6 +57,16 @@ This repository (`PROJECT-ADVWEB`) follows a **progressive cumulative practical 
   - Full-stack React Task Management UI (`Tasks.tsx`) reflecting live MongoDB connection, ObjectId support, and schema simulator.
   - Automated 24-point test runner (`test-api.js`) and REST Client collection (`test.http`).
 
+### 6. [Folder `6/`](file:///d:/SEM-5/PROJECT-ADVWEB/6) — Practical 6 (Practical 1 + 2 + 3 + 4 + 5 + Full-Stack Integration)
+- **Topic**: Full Stack Integration (React + Node.js + MongoDB).
+- **Includes**: Everything from Practical 1, 2, 3, 4 & 5 PLUS:
+  - Centralized typed API service layer (`src/services/api.ts`) managing all backend HTTP communication.
+  - Animated Toast Notification system (`src/components/Toast.tsx`) providing auto-dismissing visual feedback on all CRUD mutations.
+  - Granular per-item loading states for asynchronous toggling, creation, and modal editing.
+  - Deletion safety confirmation modal preventing accidental document loss.
+  - Verified end-to-end state synchronization with MongoDB persistence across browser refreshes (`F5`).
+  - Automated 25-point full-stack test runner (`test-api.js`) and REST Client collection (`test.http`).
+
 ---
 
 ## 🚀 Instructions for Future Practicals (Folder `5/`, `6/`, etc.)

@@ -1,0 +1,85 @@
+### ===================================================================
+### Practical 6: Full Stack Integration API Test Suite (.http)
+### Base URL: http://localhost:5000
+### ===================================================================
+
+@baseUrl = http://localhost:5000
+
+### 1. Server Health, Database & CORS Info (GET /)
+GET {{baseUrl}}/
+Accept: application/json
+
+###
+
+### 2. Fetch All Tasks for React Frontend (GET /tasks)
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+###
+
+### 3. Filter Tasks by Completion Status (GET /tasks?completed=true)
+GET {{baseUrl}}/tasks?completed=true
+Accept: application/json
+
+###
+
+### 4. Create Task with Validation (POST /tasks) - 201 Created
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Build Full Stack React + Node + MongoDB App",
+  "description": "Practical 6 end-to-end integration and state synchronization",
+  "completed": false
+}
+
+###
+
+### 5. Validation Error Rejection (POST /tasks without title) - 400 Bad Request
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "description": "Missing title triggers structured 400 validation error in React toast."
+}
+
+###
+
+### 6. Read Single Task Document by MongoDB ObjectId (Replace with live _id)
+GET {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Accept: application/json
+
+###
+
+### 7. Update Task Status & Content (PUT /tasks/:id) - 200 OK
+PUT {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Content-Type: application/json
+
+{
+  "completed": true,
+  "description": "Updated and synchronized with React frontend state"
+}
+
+###
+
+### 8. Delete Task with Full-Stack Confirmation (DELETE /tasks/:id) - 200 OK
+DELETE {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Accept: application/json
+
+###
+
+### 9. CastError Format Checking (GET /tasks/invalid-id) - 400 Bad Request
+GET {{baseUrl}}/tasks/invalid-object-id-format
+Accept: application/json
+
+###
+
+### 10. Test 404 Route - 404 Not Found
+GET {{baseUrl}}/api/non-existent-route
+Accept: application/json
+
+###
+
+### 11. Test Global Error Handler Simulation (GET /error-test) - 500 Server Error
+GET {{baseUrl}}/error-test
+Accept: application/json
