@@ -1,0 +1,85 @@
+### ===================================================================
+### Practical 5: MongoDB & Mongoose Task Manager API Test Suite (.http)
+### Base URL: http://localhost:5000
+### ===================================================================
+
+@baseUrl = http://localhost:5000
+
+### 1. Server Health & MongoDB Connection Info (GET /)
+GET {{baseUrl}}/
+Accept: application/json
+
+###
+
+### 2. Read All Tasks from MongoDB (GET /tasks)
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+###
+
+### 3. Filter Tasks by Status (GET /tasks?completed=true)
+GET {{baseUrl}}/tasks?completed=true
+Accept: application/json
+
+###
+
+### 4. Create Task - Schema Validation Success (POST /tasks) - 201 Created
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Learn MongoDB Schema Design with Mongoose",
+  "description": "Enforce data validation rules, required fields, and default timestamps",
+  "completed": false
+}
+
+###
+
+### 5. Create Task - Validation Failure Missing Title (POST /tasks) - 400 Bad Request
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "description": "This request is missing the required title field."
+}
+
+###
+
+### 6. Read Single Task by MongoDB ObjectId (Replace with live _id)
+GET {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Accept: application/json
+
+###
+
+### 7. Update Task by ObjectId (Replace with live _id) - 200 OK
+PUT {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Content-Type: application/json
+
+{
+  "completed": true,
+  "description": "Updated task description persisting in MongoDB"
+}
+
+###
+
+### 8. Delete Task by ObjectId (Replace with live _id) - 200 OK
+DELETE {{baseUrl}}/tasks/66b9f35e98f01a5b82c7a123
+Accept: application/json
+
+###
+
+### 9. CastError Test - Invalid ObjectId Format (GET /tasks/invalid-id) - 400 Bad Request
+GET {{baseUrl}}/tasks/invalid-id-not-objectid
+Accept: application/json
+
+###
+
+### 10. Test 404 Route Handler - 404 Not Found
+GET {{baseUrl}}/api/non-existent-endpoint
+Accept: application/json
+
+###
+
+### 11. Test Global Error Handler Simulation (GET /error-test) - 500 Server Error
+GET {{baseUrl}}/error-test
+Accept: application/json

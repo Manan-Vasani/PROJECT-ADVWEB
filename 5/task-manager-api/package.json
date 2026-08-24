@@ -1,0 +1,17 @@
+{
+  "name": "task-manager-api",
+  "version": "1.0.0",
+  "description": "Practical 5 - Task Manager RESTful API with Node.js, Express, and MongoDB Mongoose",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "mongoose": "^9.9.3"
+  }
+}

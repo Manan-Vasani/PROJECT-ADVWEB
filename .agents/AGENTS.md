@@ -47,6 +47,16 @@ This repository (`PROJECT-ADVWEB`) follows a **progressive cumulative practical 
   - Interactive full-stack Task Management UI (`Tasks.tsx`) with real-time request/response console.
   - Automated 17-point test runner (`test-api.js`) and REST Client collection (`test.http`).
 
+### 5. [Folder `5/`](file:///d:/SEM-5/PROJECT-ADVWEB/5) — Practical 5 (Practical 1 + 2 + 3 + 4 + MongoDB & Mongoose)
+- **Topic**: MongoDB Integration and Schema Design with Mongoose.
+- **Includes**: Everything from Practical 1, 2, 3 & 4 PLUS:
+  - MongoDB connection using Mongoose ODM with configurable `.env` (`MONGO_URI`).
+  - Mongoose `Task` schema & model with 4 fields: `title` (required, trimmed), `description`, `completed` (default false), and `createdAt` (default Date.now).
+  - Database model operations replacing in-memory array (`Task.find()`, `Task.create()`, `Task.findByIdAndUpdate()`, `Task.findByIdAndDelete()`).
+  - Structured JSON validation error handling intercepting Mongoose `ValidationError` (400 Bad Request) and `CastError` (400 Invalid ID).
+  - Full-stack React Task Management UI (`Tasks.tsx`) reflecting live MongoDB connection, ObjectId support, and schema simulator.
+  - Automated 24-point test runner (`test-api.js`) and REST Client collection (`test.http`).
+
 ---
 
 ## 🚀 Instructions for Future Practicals (Folder `5/`, `6/`, etc.)
