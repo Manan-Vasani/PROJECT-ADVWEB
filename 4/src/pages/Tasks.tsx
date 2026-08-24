@@ -30,7 +30,7 @@ export const Tasks: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [serverOnline, setServerOnline] = useState<boolean | null>(null);
-  
+
   // Form states
   const [newTitle, setNewTitle] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
@@ -296,8 +296,8 @@ export const Tasks: React.FC = () => {
               {serverOnline === null
                 ? 'Connecting to Server...'
                 : serverOnline
-                ? 'Backend Server: 🟢 Online (Port 5000)'
-                : 'Backend Server: 🔴 Offline (Run `npm run server`)'}
+                  ? 'Backend Server: 🟢 Online (Port 5000)'
+                  : 'Backend Server: 🔴 Offline (Run `npm run server`)'}
             </span>
           </div>
         </div>
@@ -441,7 +441,8 @@ export const Tasks: React.FC = () => {
                 <Spinner label="Loading tasks from Express API (http://localhost:5000/tasks)..." />
               ) : error && !serverOnline ? (
                 <ErrorMessage
-                  message={`Cannot connect to Express backend server: ${error}. Make sure to run 'npm run server' in directory '4' to start the Node.js API.`}
+                  title="Backend API Server Offline"
+                  message={`Cannot connect to Express backend server: ${error}. Make sure the Node.js API server is running on port 5000 ('npm run server' or 'npm run dev').`}
                   onRetry={fetchTasks}
                 />
               ) : filteredTasks.length === 0 ? (
@@ -469,9 +470,8 @@ export const Tasks: React.FC = () => {
                             <span className="task-id-badge">#{task.id}</span>
                             <h4 className="task-title-text">{task.title}</h4>
                             <span
-                              className={`task-status-tag ${
-                                task.completed ? 'tag-done' : 'tag-pending'
-                              }`}
+                              className={`task-status-tag ${task.completed ? 'tag-done' : 'tag-pending'
+                                }`}
                             >
                               {task.completed ? 'Completed (200 OK)' : 'Pending'}
                             </span>
@@ -644,7 +644,7 @@ export const Tasks: React.FC = () => {
             <h4 className="docs-subheading">💻 Terminal cURL Commands</h4>
             <div className="curl-box">
               <pre>
-{`# 1. Read All Tasks
+                {`# 1. Read All Tasks
 curl -X GET http://localhost:5000/tasks
 
 # 2. Create a New Task
@@ -695,15 +695,14 @@ curl -X GET http://localhost:5000/error-test`}
                   <span className={`method-badge ${log.method.toLowerCase()}`}>{log.method}</span>
                   <span className="log-endpoint">{log.endpoint}</span>
                   <span
-                    className={`status-code-badge badge-${
-                      log.status >= 500
+                    className={`status-code-badge badge-${log.status >= 500
                         ? '500'
                         : log.status >= 400
-                        ? '404'
-                        : log.status === 201
-                        ? '201'
-                        : '200'
-                    }`}
+                          ? '404'
+                          : log.status === 201
+                            ? '201'
+                            : '200'
+                      }`}
                   >
                     {log.status || 'ERR'} {log.statusText}
                   </span>
@@ -717,7 +716,7 @@ curl -X GET http://localhost:5000/error-test`}
 
       {/* Modern Edit Task Modal */}
       {editingTask && (
-        <div 
+        <div
           className="modal-backdrop"
           onClick={(e) => {
             if (e.target === e.currentTarget) setEditingTask(null);
@@ -746,7 +745,7 @@ curl -X GET http://localhost:5000/error-test`}
                     </div>
                   </div>
                 </div>
-                
+
                 <button
                   type="button"
                   className="modal-close-btn"

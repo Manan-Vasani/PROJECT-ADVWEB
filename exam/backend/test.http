@@ -1,0 +1,88 @@
+### ====================================================================
+### MedCare Plus Hospital Appointment System - REST API Test Collection
+### ====================================================================
+
+@baseUrl = http://localhost:5000/api/v1
+
+### 1. [Task 3] GET All Appointments (200 OK)
+GET {{baseUrl}}/appointments
+Content-Type: application/json
+
+###
+
+### 2. [Task 3] POST Create New Appointment (201 Created)
+POST {{baseUrl}}/appointments
+Content-Type: application/json
+
+{
+  "patientName": "Samantha Reed",
+  "doctorName": "Dr. Sarah Jenkins",
+  "date": "2026-09-05",
+  "timeSlot": "10:30 AM",
+  "status": "confirmed",
+  "reason": "Cardiology post-surgery evaluation"
+}
+
+###
+
+### 3. [Task 3 & 4] GET All Doctors (200 OK)
+GET {{baseUrl}}/doctors
+Content-Type: application/json
+
+###
+
+### 4. [Task 5] POST Real MongoDB Operation - Create Patient in Atlas (201 Created)
+POST {{baseUrl}}/patients
+Content-Type: application/json
+
+{
+  "name": "Michael Chang",
+  "email": "michael.chang.atlas@medcareplus.com",
+  "phone": "+1-555-8899",
+  "bloodGroup": "B+",
+  "age": 29
+}
+
+###
+
+### 5. [Task 5] GET Real MongoDB Operation - Find All Patients from Atlas (200 OK)
+GET {{baseUrl}}/patients
+Content-Type: application/json
+
+###
+
+### 6. [Task 5] POST Valid Patient Schema Test (200 OK)
+POST {{baseUrl}}/test/validate
+Content-Type: application/json
+
+{
+  "type": "patient",
+  "payload": {
+    "name": "David Miller",
+    "email": "david.miller@example.com",
+    "phone": "+1-555-0199",
+    "bloodGroup": "O+",
+    "age": 34
+  }
+}
+
+###
+
+### 7. [Task 5] POST Invalid Blood Group Test - Validation Failure (400 Bad Request)
+POST {{baseUrl}}/test/validate
+Content-Type: application/json
+
+{
+  "type": "patient",
+  "payload": {
+    "name": "Invalid Patient",
+    "email": "invalid@medcareplus.com",
+    "bloodGroup": "INVALID_TYPE"
+  }
+}
+
+###
+
+### 8. [Task 3] GET Trigger 500 Unhandled Error Test (Global Error Handler)
+GET {{baseUrl}}/test/trigger-error
+Content-Type: application/json

@@ -1,11 +1,16 @@
 import React from 'react';
 
 interface ErrorMessageProps {
+  title?: string;
   message: string;
   onRetry?: () => void;
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) => {
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({ 
+  title = 'Failed to Fetch Data', 
+  message, 
+  onRetry 
+}) => {
   return (
     <div className="error-box">
       <div className="error-icon-wrapper">
@@ -16,7 +21,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) 
         </svg>
       </div>
       <div className="error-content">
-        <h4 className="error-title">Failed to Fetch Repositories</h4>
+        <h4 className="error-title">{title}</h4>
         <p className="error-message">{message}</p>
         {onRetry && (
           <button type="button" className="btn btn-secondary retry-btn" onClick={onRetry}>

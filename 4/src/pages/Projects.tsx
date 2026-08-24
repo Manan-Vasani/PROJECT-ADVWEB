@@ -97,7 +97,7 @@ export const Projects: React.FC = () => {
       {loading ? (
         <Spinner label={`Fetching live repositories for "${username}"...`} />
       ) : error ? (
-        <ErrorMessage message={error} onRetry={fetchRepos} />
+        <ErrorMessage title="Failed to Fetch Repositories" message={error} onRetry={fetchRepos} />
       ) : (
         /* 4. Map over repos array and render name and html_url */
         <RepoList repos={repos} />
