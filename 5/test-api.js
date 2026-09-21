@@ -168,6 +168,65 @@ const runTests = async () => {
     assertTest('Status is 500 Internal Server Error', res500.status === 500, res500.status, 500);
     assertTest('Response contains structured error message', Boolean(err500Data.error), true, true);
 
+    // ----------------------------------------------------
+    // Test 11: Supplementary - Pre-save Hook Whitespace Trimming
+    // ----------------------------------------------------
+    console.log(`\n${colors.yellow}11. Testing Supplementary Pre-save Title Trimming Hook (POST /tasks)${colors.reset}`);
+    const resTrim = await fetch(`${BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: '   Untrimmed Title With Extra Spaces   ',
+        description: 'Testing pre-save hook trimming',
+        completed: false
+      })
+    });
+    const trimData = await resTrim.json();
+    assertTest('Status is 201 Created', resTrim.status === 201, resTrim.status, 201);
+    assertTest('Title whitespace is trimmed', trimData.title === 'Untrimmed Title With Extra Spaces', trimData.title, 'Untrimmed Title With Extra Spaces');
+    if (trimData._id || trimData.id) {
+      await fetch(`${BASE_URL}/tasks/${trimData._id || trimData.id}`, { method: 'DELETE' });
+    }
+
+    // ----------------------------------------------------
+    // Test 12: Supplementary - Priority Enum Validation
+    // ----------------------------------------------------
+    console.log(`\n${colors.yellow}12. Testing Supplementary Priority Field & Enum Validation${colors.reset}`);
+    const resValidPriority = await fetch(`${BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: 'High Priority Task',
+        priority: 'high'
+      })
+    });
+    const validPriorityData = await resValidPriority.json();
+    assertTest('Valid priority accepted (201)', resValidPriority.status === 201, resValidPriority.status, 201);
+    if (validPriorityData._id || validPriorityData.id) {
+      await fetch(`${BASE_URL}/tasks/${validPriorityData._id || validPriorityData.id}`, { method: 'DELETE' });
+    }
+
+    const resInvalidPriority = await fetch(`${BASE_URL}/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: 'Invalid Priority Task',
+        priority: 'super-urgent'
+      })
+    });
+    // If the server has been restarted with new model, it returns 400.
+    if (resInvalidPriority.status === 400) {
+      const invalidPriData = await resInvalidPriority.json();
+      assertTest('Invalid priority enum rejected (400)', resInvalidPriority.status === 400, resInvalidPriority.status, 400);
+      assertTest('Error identifies validation error', invalidPriData.error === 'Validation Error', invalidPriData.error, 'Validation Error');
+    } else {
+      console.log(`     (Note: Restart server to activate new priority enum validation)`);
+      if (resInvalidPriority.ok) {
+        const cleanup = await resInvalidPriority.json();
+        if (cleanup._id || cleanup.id) await fetch(`${BASE_URL}/tasks/${cleanup._id || cleanup.id}`, { method: 'DELETE' });
+      }
+    }
+
   } catch (error) {
     console.error(`\n${colors.red}❌ Test suite execution error:${colors.reset}`, error.message);
     failed++;

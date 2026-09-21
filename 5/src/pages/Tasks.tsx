@@ -822,71 +822,90 @@ curl -X DELETE http://localhost:5000/tasks/<OBJECT_ID>`}
             if (e.target === e.currentTarget) setEditingTask(null);
           }}
         >
-          <div className="modal-content card">
-            <div className="modal-header">
-              <h3 className="modal-title">✏️ Edit MongoDB Document</h3>
-              <button
-                type="button"
-                className="modal-close-btn"
-                onClick={() => setEditingTask(null)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-id-row">
-              <span className="modal-id-label">Document ObjectId:</span>
-              <code className="modal-id-code">{getTaskId(editingTask)}</code>
-            </div>
-
-            <form onSubmit={handleSaveEdit} className="modal-form">
-              <div className="form-group">
-                <label className="form-label">
-                  Task Title <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea
-                  className="form-input form-textarea"
-                  rows={3}
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                ></textarea>
-              </div>
-
-              <div className="form-group checkbox-group">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={editCompleted}
-                    onChange={(e) => setEditCompleted(e.target.checked)}
-                  />
-                  <span>Mark as Completed in MongoDB</span>
-                </label>
-              </div>
-
-              <div className="modal-actions">
+          <div className="modal-dialog">
+            <div className="modal-card">
+              <div className="modal-header">
+                <div className="modal-header-brand">
+                  <div className="modal-icon-badge">✏️</div>
+                  <div>
+                    <div className="modal-title-row">
+                      <h3 className="modal-title">Edit MongoDB Document</h3>
+                      <span className="modal-id-chip">MongoDB</span>
+                    </div>
+                    <div className="modal-meta-row">
+                      <span className="modal-endpoint-pill">PUT /tasks/{getTaskId(editingTask)}</span>
+                    </div>
+                  </div>
+                </div>
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="modal-close-btn"
                   onClick={() => setEditingTask(null)}
                 >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Save Changes 💾
+                  ✕
                 </button>
               </div>
-            </form>
+
+              <div className="modal-id-row">
+                <span className="modal-id-label">Document ObjectId:</span>
+                <code className="modal-id-code">{getTaskId(editingTask)}</code>
+              </div>
+
+              <form onSubmit={handleSaveEdit} className="modal-form">
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label className="form-label">
+                      Task Title <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="modal-input"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Description <span className="label-optional">(Optional)</span></label>
+                    <textarea
+                      className="modal-textarea"
+                      rows={3}
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                    ></textarea>
+                  </div>
+
+                  <div className="modal-status-toggle-card">
+                    <label className="status-checkbox-label">
+                      <input
+                        type="checkbox"
+                        className="modal-checkbox"
+                        checked={editCompleted}
+                        onChange={(e) => setEditCompleted(e.target.checked)}
+                      />
+                      <div>
+                        <span className="status-toggle-heading">Mark as Completed</span>
+                        <span className="status-toggle-sub">Updates completed flag in MongoDB</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="modal-btn-cancel"
+                    onClick={() => setEditingTask(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="modal-btn-save">
+                    Save Changes 💾
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

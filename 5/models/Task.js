@@ -19,6 +19,14 @@ const taskSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    priority: {
+      type: String,
+      enum: {
+        values: ['low', 'medium', 'high'],
+        message: '{VALUE} is not a valid priority (must be low, medium, or high)'
+      },
+      default: 'medium'
+    },
     createdAt: {
       type: Date,
       default: Date.now
@@ -39,7 +47,18 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
+// Supplementary Problem: Pre-save hook that automatically trims whitespace from title
+taskSchema.pre('save', function (next) {
+  if (this.title) {
+    this.title = this.title.trim();
+  }
+  if (next && typeof next === 'function') {
+    next();
+  }
+});
+
 // Create and export Mongoose Task Model
 const Task = mongoose.model('Task', taskSchema);
 
 export default Task;
+  

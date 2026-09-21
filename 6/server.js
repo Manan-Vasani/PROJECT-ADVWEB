@@ -93,6 +93,7 @@ app.get('/', (req, res) => {
       title: 'String (required, trimmed)',
       description: 'String (trimmed, default: "")',
       completed: 'Boolean (default: false)',
+      priority: "String (enum: ['low', 'medium', 'high'], default: 'medium')",
       createdAt: 'Date (default: Date.now)'
     },
     endpoints: {
@@ -144,12 +145,13 @@ app.get('/tasks/:id', async (req, res, next) => {
 // Route 3: POST /tasks - Create a task in MongoDB (201 Created or 400 Bad Request)
 app.post('/tasks', async (req, res, next) => {
   try {
-    const { title, description, completed } = req.body;
+    const { title, description, completed, priority } = req.body;
 
     const newTask = new Task({
       title,
       description,
-      completed
+      completed,
+      priority
     });
 
     const savedTask = await newTask.save();
@@ -162,12 +164,13 @@ app.post('/tasks', async (req, res, next) => {
 // Route 4: PUT /tasks/:id - Update an existing task in MongoDB (200 OK or 404 Not Found)
 app.put('/tasks/:id', async (req, res, next) => {
   try {
-    const { title, description, completed } = req.body;
+    const { title, description, completed, priority } = req.body;
     const updateData = {};
 
     if (title !== undefined) updateData.title = title;
     if (description !== undefined) updateData.description = description;
     if (completed !== undefined) updateData.completed = Boolean(completed);
+    if (priority !== undefined) updateData.priority = priority;
 
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.id,

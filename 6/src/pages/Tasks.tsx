@@ -797,73 +797,94 @@ curl -X DELETE http://localhost:5000/tasks/<OBJECT_ID>`}
             if (e.target === e.currentTarget && !isModalSaving) setEditingTask(null);
           }}
         >
-          <div className="modal-content card">
-            <div className="modal-header">
-              <h3 className="modal-title">✏️ Edit Task Document</h3>
-              <button
-                type="button"
-                className="modal-close-btn"
-                disabled={isModalSaving}
-                onClick={() => setEditingTask(null)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-id-row">
-              <span className="modal-id-label">Document ID:</span>
-              <code className="modal-id-code">{getTaskId(editingTask)}</code>
-            </div>
-
-            <form onSubmit={handleSaveEdit} className="modal-form">
-              <div className="form-group">
-                <label className="form-label">
-                  Task Title <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea
-                  className="form-input form-textarea"
-                  rows={3}
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                ></textarea>
-              </div>
-
-              <div className="form-group checkbox-group">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={editCompleted}
-                    onChange={(e) => setEditCompleted(e.target.checked)}
-                  />
-                  <span>Mark as Completed</span>
-                </label>
-              </div>
-
-              <div className="modal-actions">
+          <div className="modal-dialog">
+            <div className="modal-card">
+              <div className="modal-header">
+                <div className="modal-header-brand">
+                  <div className="modal-icon-badge">✏️</div>
+                  <div>
+                    <div className="modal-title-row">
+                      <h3 className="modal-title">Edit Task Document</h3>
+                      <span className="modal-id-chip">MongoDB</span>
+                    </div>
+                    <div className="modal-meta-row">
+                      <span className="modal-endpoint-pill">PUT /tasks/{getTaskId(editingTask)}</span>
+                    </div>
+                  </div>
+                </div>
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="modal-close-btn"
                   disabled={isModalSaving}
                   onClick={() => setEditingTask(null)}
                 >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary" disabled={isModalSaving}>
-                  {isModalSaving ? 'Saving...' : 'Save Changes 💾'}
+                  ✕
                 </button>
               </div>
-            </form>
+
+              <div className="modal-id-row">
+                <span className="modal-id-label">Document ID:</span>
+                <code className="modal-id-code">{getTaskId(editingTask)}</code>
+              </div>
+
+              <form onSubmit={handleSaveEdit} className="modal-form">
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label className="form-label">
+                      Task Title <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="modal-input"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">
+                      Description <span className="label-optional">(Optional)</span>
+                    </label>
+                    <textarea
+                      className="modal-textarea"
+                      rows={3}
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                    ></textarea>
+                  </div>
+
+                  <div className="modal-status-toggle-card">
+                    <label className="status-checkbox-label">
+                      <input
+                        type="checkbox"
+                        className="modal-checkbox"
+                        checked={editCompleted}
+                        onChange={(e) => setEditCompleted(e.target.checked)}
+                      />
+                      <div>
+                        <span className="status-toggle-heading">Mark as Completed</span>
+                        <span className="status-toggle-sub">Updates completed flag in MongoDB</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="modal-btn-cancel"
+                    disabled={isModalSaving}
+                    onClick={() => setEditingTask(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="modal-btn-save" disabled={isModalSaving}>
+                    {isModalSaving ? 'Saving...' : 'Save Changes 💾'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
@@ -876,46 +897,66 @@ curl -X DELETE http://localhost:5000/tasks/<OBJECT_ID>`}
             if (e.target === e.currentTarget && actionLoadingId === null) setDeletingTask(null);
           }}
         >
-          <div className="modal-content card delete-confirm-modal">
-            <div className="modal-header">
-              <h3 className="modal-title text-danger">⚠️ Confirm Deletion</h3>
-              <button
-                type="button"
-                className="modal-close-btn"
-                disabled={actionLoadingId !== null}
-                onClick={() => setDeletingTask(null)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="delete-confirm-body">
-              <p className="delete-warning-text">
-                Are you sure you want to permanently delete this task from MongoDB?
-              </p>
-              <div className="delete-item-preview">
-                <strong>{deletingTask.title}</strong>
-                {deletingTask.description && <p>{deletingTask.description}</p>}
+          <div className="modal-dialog">
+            <div className="modal-card">
+              <div className="modal-header">
+                <div className="modal-header-brand">
+                  <div className="modal-icon-badge" style={{ background: 'rgba(255, 59, 48, 0.1)', color: '#ff3b30' }}>
+                    ⚠️
+                  </div>
+                  <div>
+                    <h3 className="modal-title" style={{ color: '#ff3b30' }}>Confirm Deletion</h3>
+                    <div className="modal-meta-row">
+                      <span className="modal-endpoint-pill">DELETE /tasks/{getTaskId(deletingTask)}</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="modal-close-btn"
+                  disabled={actionLoadingId !== null}
+                  onClick={() => setDeletingTask(null)}
+                >
+                  ✕
+                </button>
               </div>
-            </div>
 
-            <div className="modal-actions">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                disabled={actionLoadingId !== null}
-                onClick={() => setDeletingTask(null)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                disabled={actionLoadingId !== null}
-                onClick={handleConfirmDelete}
-              >
-                {actionLoadingId !== null ? 'Deleting from DB...' : 'Yes, Delete Task 🗑️'}
-              </button>
+              <div className="modal-body">
+                <p style={{ margin: 0, fontSize: '15px', color: '#1d1d1f', lineHeight: 1.5 }}>
+                  Are you sure you want to permanently delete this task from MongoDB? This action cannot be undone.
+                </p>
+                <div style={{
+                  padding: '14px 18px',
+                  background: '#f5f5f7',
+                  borderRadius: '12px',
+                  border: '1px solid #e5e5ea'
+                }}>
+                  <strong style={{ fontSize: '15px', color: '#1d1d1f', display: 'block' }}>{deletingTask.title}</strong>
+                  {deletingTask.description && (
+                    <p style={{ margin: '6px 0 0 0', fontSize: '13px', color: '#86868b' }}>{deletingTask.description}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="modal-btn-cancel"
+                  disabled={actionLoadingId !== null}
+                  onClick={() => setDeletingTask(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="modal-btn-save"
+                  style={{ background: '#ff3b30', boxShadow: '0 2px 8px rgba(255, 59, 48, 0.35)' }}
+                  disabled={actionLoadingId !== null}
+                  onClick={handleConfirmDelete}
+                >
+                  {actionLoadingId !== null ? 'Deleting...' : 'Yes, Delete Task 🗑️'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
