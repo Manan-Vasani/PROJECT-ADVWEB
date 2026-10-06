@@ -1,0 +1,132 @@
+### Practical 9: In-Memory Caching & Latency Optimization REST Client
+@baseUrl = http://localhost:5000
+
+### 1. Server Health Check & Cache Engine Metadata
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. View Cache Statistics Initially (Supplementary Problem 2)
+GET {{baseUrl}}/api/cache/stats
+Accept: application/json
+
+### 3. Clear/Flush In-Memory Cache (Supplementary Problem 2)
+POST {{baseUrl}}/api/cache/clear
+Accept: application/json
+
+### 4. Register New User
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Manan Vasani",
+  "email": "cache_manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 5. Login User & Retrieve JWT Token
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cache_manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 6. Set Authentication Token Variable
+@authToken = {{login.response.body.token}}
+
+### 7. Seed Task in MongoDB (Write Operation)
+# @name createTask
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Evaluate In-Memory Caching Latency",
+  "description": "Practical 9 node-cache TTL benchmark with Express and MongoDB",
+  "priority": "high",
+  "completed": false
+}
+
+### 8. First Request: Cache MISS (Queries MongoDB & Stores in Cache)
+# Check response header: X-Cache should be "MISS"
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 9. Second Request: Cache HIT (Immediate response from node-cache)
+# Check response header: X-Cache should be "HIT"
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 10. Third Request: Cache HIT (Confirmation of sub-millisecond retrieval)
+# Check response header: X-Cache should be "HIT"
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 11. Cache Bypass via Query Parameter (?no_cache=true)
+# Check response header: X-Cache should be "BYPASS"
+GET {{baseUrl}}/tasks?no_cache=true
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 12. Single Task Document Fetch 1: Cache MISS (Supplementary Problem 1)
+@taskId = {{createTask.response.body._id}}
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 13. Single Task Document Fetch 2: Cache HIT (Supplementary Problem 1)
+# Check response header: X-Cache should be "HIT"
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 14. Update Task by ID: Triggers Cache Invalidation
+# Check response header: X-Cache-Invalidated should be "true"
+PUT {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "completed": true,
+  "priority": "medium"
+}
+
+### 15. Verify Cache MISS after Update (Ensures No Stale Data)
+# Check response header: X-Cache should be "MISS"
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 16. Delete Task: Triggers Cache Invalidation
+# Check response header: X-Cache-Invalidated should be "true"
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 17. Verify Cache MISS after Delete
+# Check response header: X-Cache should be "MISS"
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 18. Inspect Final Cache Statistics & Hit Ratio
+GET {{baseUrl}}/api/cache/stats
+Accept: application/json
+
+### 19. Unauthorized Request Test (Expected: 401 Unauthorized)
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### 20. 404 Route Not Found Test
+GET {{baseUrl}}/api/unknown-endpoint
+Accept: application/json
+
+### 21. 500 Internal Server Error Simulation
+GET {{baseUrl}}/error-test
+Accept: application/json
