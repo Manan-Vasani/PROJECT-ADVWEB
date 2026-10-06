@@ -67,9 +67,54 @@ This repository (`PROJECT-ADVWEB`) follows a **progressive cumulative practical 
   - Verified end-to-end state synchronization with MongoDB persistence across browser refreshes (`F5`).
   - Automated 25-point full-stack test runner (`test-api.js`) and REST Client collection (`test.http`).
 
+### 7. [Folder `7/`](file:///d:/SEM-5/PROJECT-ADVWEB/7) — Practical 7 (Practical 1 + 2 + 3 + 4 + 5 + 6 + Auth & Middleware)
+- **Topic**: Authentication and Middleware Pipeline (JWT + bcrypt).
+- **Includes**: Everything from Practical 1, 2, 3, 4, 5 & 6 PLUS:
+  - User registration & login with password hashing via `bcrypt` (10 salt rounds).
+  - Stateless authentication with signed JSON Web Tokens (JWT) with 1h expiration.
+  - JWT Authentication Middleware (`middleware/auth.js`) protecting all `/tasks` routes (`Authorization: Bearer <token>`).
+  - Server-side input validation middleware (`middleware/validate.js`) verifying email format, password length (>= 6), and required fields.
+  - User-scoped MongoDB Task ownership (`user` reference ObjectId on `Task` schema).
+  - Full-stack React 19 Apple-styled Auth modal (`AuthModal.tsx`), navbar user badge, logout mechanism, and 401 token expiry auto-redirect.
+  - Automated 35-point test runner (`test-api.js`) and REST Client collection (`test.http`).
+
+### 8. [Folder `8/`](file:///d:/SEM-5/PROJECT-ADVWEB/8) — Practical 8 (Practical 1 + 2 + 3 + 4 + 5 + 6 + 7 + Code Splitting)
+- **Topic**: Performance Optimization and Lazy Loading in React (`React.lazy()` + `<Suspense>`).
+- **Includes**: Everything from Practical 1, 2, 3, 4, 5, 6 & 7 PLUS:
+  - Dynamic route-based code splitting using `React.lazy()` for all pages (`Home`, `Projects`, `Tasks`, `Contact`).
+  - Sleek Apple-styled `<RouteFallback />` with pulsing loading ring and shimmering skeleton bars.
+  - Supplementary lazy-loaded heavy component (`TaskAnalyticsChart.tsx`) for velocity and priority distribution profiling.
+  - On-screen Performance Monitor ribbon (`PerformanceMonitor.tsx`) displaying real-time chunk status and before/after bundle metrics (~51% initial JS reduction).
+  - Verified Vite production build generating 7 modular dynamic chunks with zero compile warnings.
+  - Automated 35-point backend test suite (`test-api.js`) and REST Client collection (`test.http`).
+
+### 9. [Folder `9/`](file:///d:/SEM-5/PROJECT-ADVWEB/9) — Practical 9 (Practical 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + In-Memory Caching)
+- **Topic**: In-Memory Caching and Query Optimization (`node-cache` + Express + MongoDB).
+- **Includes**: Everything from Practical 1, 2, 3, 4, 5, 6, 7 & 8 PLUS:
+  - High-performance in-memory caching engine using `node-cache` (`services/cache.js`) with 60s TTL and automatic key expiration.
+  - Cache-Aside (Lazy Loading) on `GET /tasks` with custom HTTP headers (`X-Cache: HIT|MISS|BYPASS`).
+  - Single-task document caching on `GET /tasks/:id` (Supplementary Problem 1).
+  - Cache invalidation on all write mutations (`POST /tasks`, `PUT /tasks/:id`, `DELETE /tasks/:id`) preventing stale data.
+  - Cache telemetry and administration endpoints: `GET /api/cache/stats` and `POST /api/cache/clear` (Supplementary Problem 2).
+  - Frontend interactive 3-sample latency benchmarking dashboard (`CacheBenchmarkCard.tsx`) comparing uncached (~25ms) vs cached (~1.3ms) response times (~18x speedup).
+  - Live API Request Logger with color-coded `⚡ Cache HIT` / `📦 Cache MISS` indicators.
+  - Automated 27-point test runner (`test-api.js`) and REST Client collection (`test.http`).
+
+### 10. [Folder `10/`](file:///d:/SEM-5/PROJECT-ADVWEB/10) — Practical 10 (Practical 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + Event-Driven Architecture)
+- **Topic**: Asynchronous Processing with Event-Driven Architecture (Node.js `EventEmitter`).
+- **Includes**: Everything from Practical 1, 2, 3, 4, 5, 6, 7, 8 & 9 PLUS:
+  - Dedicated EventEmitter singleton module (`events/taskEvents.js` and `task-manager-api/events.js`) with telemetry tracking.
+  - Asynchronous background listeners (`events/listeners.js`) decoupling side effects (simulated mail/push notifications) from the main request path.
+  - Immediate HTTP 201 response in `POST /tasks` followed by asynchronous `emit('task-created')` with timestamp evidence (`[API Sent]` < `[Worker Finished]`).
+  - Supplementary Problem 1: `task-deleted` event and background audit archival listener triggered on `DELETE /tasks/:id`.
+  - Supplementary Problem 2: Unhandled `'error'` event listener preventing Node.js process termination on background failures.
+  - Supplementary Problem 3: Simulated slow background job worker (`POST /api/events/test-slow`) demonstrating non-blocking response times (<15ms).
+  - Frontend interactive Event Telemetry Stream card (`EventNotificationCard.tsx`) with live polling, metrics grid, and slow-worker countdown banner.
+  - Automated 27-point test suite (`test-api.js`) verifying non-blocking timestamp ordering and REST Client collection (`test.http`).
+
 ---
 
-## 🚀 Instructions for Future Practicals (Folder `5/`, `6/`, etc.)
+## 🚀 Instructions for Future Practicals (Folder `11/`, etc.)
 
 Whenever creating or working on a new practical folder `N`:
 1. **Initialize Baseline**: Copy the complete working codebase from folder `N-1` into the new folder `N`.
@@ -77,3 +122,4 @@ Whenever creating or working on a new practical folder `N`:
 3. **Implement Incremental Feature**: Implement the new Practical `N` objectives without breaking or removing features inherited from earlier practicals.
 4. **Maintain Design Consistency**: Reuse existing CSS tokens, typography, and component styling.
 5. **Verify**: Always run `npm run build` in the new practical folder to confirm clean compilation and test any backend servers or test suites.
+
