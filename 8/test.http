@@ -1,0 +1,99 @@
+### Practical 7: Authentication & Middleware Pipeline REST Client Tests
+@baseUrl = http://localhost:5000
+
+### 1. Server Health Check
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. Register New User (Valid)
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Manan Vasani",
+  "email": "manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 3. Register Validation Failure (Short Password < 6 chars)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "invalid@test.com",
+  "password": "123"
+}
+
+### 4. Login User
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 5. Attempt Protected Route WITHOUT Token (Expected: 401 Unauthorized)
+GET {{baseUrl}}/tasks
+Accept: application/json
+
+### 6. Get Current User Profile (Using JWT)
+@authToken = {{login.response.body.token}}
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 7. Get Tasks (Authenticated)
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 8. Create Task (Authenticated)
+# @name createTask
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Implement JWT Middleware",
+  "description": "Practical 7 Authentication & Authorization",
+  "priority": "high",
+  "completed": false
+}
+
+### 9. Task Validation Failure (Missing Title)
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "description": "This should fail because title is required"
+}
+
+### 10. Update Task by ID
+@taskId = {{createTask.response.body._id}}
+PUT {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "completed": true,
+  "priority": "medium"
+}
+
+### 11. Delete Task by ID
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 12. Test CastError for Invalid ObjectId
+GET {{baseUrl}}/tasks/invalid-id-123
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 13. Test 500 Global Error Handler
+GET {{baseUrl}}/error-test
+Accept: application/json
