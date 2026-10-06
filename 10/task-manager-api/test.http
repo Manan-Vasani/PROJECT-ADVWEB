@@ -1,0 +1,73 @@
+### Practical 10: Event-Driven Architecture REST Client Tests (CommonJS)
+@baseUrl = http://localhost:5000
+
+### 1. Server Health Check & EventEmitter Metadata
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. View Event Telemetry Stream Initially
+GET {{baseUrl}}/api/events/logs
+Accept: application/json
+
+### 3. Clear Event Telemetry Stream
+POST {{baseUrl}}/api/events/clear
+Accept: application/json
+
+### 4. Register New User
+# @name register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Manan Vasani",
+  "email": "event_manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 5. Login User & Retrieve Token
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "event_manan@charusat.edu.in",
+  "password": "password123"
+}
+
+### 6. Set Authentication Token Variable
+@authToken = {{login.response.body.token}}
+
+### 7. Create Task: Emits 'task-created' Event Asynchronously
+# @name createTask
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Evaluate Native EventEmitter Non-Blocking Execution",
+  "description": "Practical 10 background email and notification dispatch",
+  "priority": "high",
+  "completed": false
+}
+
+### 8. View Event Telemetry to Confirm 'task-created' Timestamp
+GET {{baseUrl}}/api/events/logs
+Accept: application/json
+
+### 9. Delete Task: Emits 'task-deleted' Event Asynchronously
+@taskId = {{createTask.response.body._id}}
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+### 10. Test Error Event Listener Safety
+POST {{baseUrl}}/api/events/test-error
+Content-Type: application/json
+
+{
+  "message": "Simulated push notification gateway timeout"
+}
+
+### 11. Inspect Final Event Telemetry & Counters
+GET {{baseUrl}}/api/events/logs
+Accept: application/json
