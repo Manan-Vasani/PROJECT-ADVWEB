@@ -1,0 +1,38 @@
+# Practical 11: Multi-Stage Build Dockerfile for React Frontend
+# Stage 1: Build Stage
+FROM node:18-alpine AS build
+
+WORKDIR /app
+
+# Copy dependency files
+COPY package*.json ./
+RUN npm install
+
+# Copy source and build configurations
+COPY index.html ./
+COPY tsconfig*.json ./
+COPY vite.config.ts ./
+COPY eslint.config.js ./
+COPY src/ ./src/
+COPY public/ ./public/
+
+# Compile production bundle
+RUN npm run build
+
+# Stage 2: Serve Stage
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy built bundle and vite config from build stage
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/vite.config.ts ./
+
+# Expose Vite preview port
+EXPOSE 5173
+
+# Serve on all interfaces so it's accessible outside the container
+CMD ["npx", "vite", "preview", "--host", "0.0.0.0", "--port", "5173"]

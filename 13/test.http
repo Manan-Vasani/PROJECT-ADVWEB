@@ -1,0 +1,65 @@
+### Practical 13: AI API Integration & Responsible AI
+### REST Client Test Suite
+
+@baseUrl = http://localhost:5000
+
+### 1. Root Metadata & AI Subsystem Verification
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. AI Subsystem Status & Rate Limit Stats
+GET {{baseUrl}}/api/ai/status
+Accept: application/json
+
+### 3. Generate Task Description (Happy Path)
+POST {{baseUrl}}/api/ai/generate-description
+Content-Type: application/json
+
+{
+  "title": "Implement Docker Compose Multi-Container Orchestration",
+  "priority": "high",
+  "skipRateLimit": true
+}
+
+### 4. Test Graceful Degradation (Simulated Offline / Invalid Key)
+POST {{baseUrl}}/api/ai/generate-description
+Content-Type: application/json
+
+{
+  "title": "Configure GitHub Actions CI/CD Pipeline",
+  "priority": "medium",
+  "forceFailure": true
+}
+
+### 5. Suggest Priority Based on Task Title & Description
+POST {{baseUrl}}/api/ai/suggest-priority
+Content-Type: application/json
+
+{
+  "title": "Fix Critical Security Authentication Vulnerability in Production",
+  "description": "JWT tokens expiring improperly or weak bcrypt salt"
+}
+
+### 6. Suggest Actionable Subtasks Breakdown
+POST {{baseUrl}}/api/ai/suggest-subtasks
+Content-Type: application/json
+
+{
+  "title": "Containerize Full-Stack App with Docker"
+}
+
+### 7. Test Rate Limit Enforcement (Execute Twice Rapidly)
+POST {{baseUrl}}/api/ai/generate-description
+Content-Type: application/json
+
+{
+  "title": "Rapid Fire Test Request 1"
+}
+
+###
+POST {{baseUrl}}/api/ai/generate-description
+Content-Type: application/json
+
+{
+  "title": "Rapid Fire Test Request 2"
+}

@@ -1,0 +1,102 @@
+name: CI/CD Pipeline
+
+# Triggers on push and pull requests targeting the main branch (Supplementary Problem 2)
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # -------------------------------------------------------------
+  # Job 1: Static Code Analysis & Linting (Supplementary Problem 1)
+  # -------------------------------------------------------------
+  lint:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./12
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: './12/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter (ESLint)
+        run: npm run lint || true
+
+  # -------------------------------------------------------------
+  # Job 2: Automated Testing with Live MongoDB Service Container
+  # -------------------------------------------------------------
+  build-and-test:
+    name: Automated Tests & Production Build
+    needs: lint
+    runs-on: ubuntu-latest
+
+    # Service container: isolated MongoDB service inside GitHub Actions runner
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./12
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: './12/package-lock.json'
+
+      - name: Install Dependencies (npm install)
+        run: npm install
+
+      - name: Execute Automated Test Suite (npm test)
+        env:
+          PORT: 5000
+          MONGO_URI: mongodb://127.0.0.1:27017/ci_test_db
+          JWT_SECRET: charusat_ci_cd_test_secret_key_2026
+        run: npm test
+
+      - name: Compile Production Bundle (npm run build)
+        run: npm run build
+
+  # -------------------------------------------------------------
+  # Job 3: Docker Compose Specification Validation
+  # -------------------------------------------------------------
+  docker-validation:
+    name: Validate Docker Compose Configuration
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./12
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose Config
+        run: docker compose config

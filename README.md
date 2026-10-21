@@ -22,6 +22,9 @@ $$\text{Folder } N = (\text{Folder } N-1 \text{ Complete Baseline}) + (\text{Pra
 | **[`8/`](./8)** | **Practical 08** | **Performance Optimization & Lazy Loading** | Route-based code splitting using `React.lazy()` & `<Suspense>`, Apple shimmer `<RouteFallback />`, lazy-loaded heavy `<TaskAnalyticsChart />`, live `<PerformanceMonitor />` (~51% initial JS reduction, 7 dynamic chunks). | ✅ Complete |
 | **[`9/`](./9)** | **Practical 09** | **In-Memory Caching & Latency Optimization** | `node-cache` in-memory engine (60s TTL), Cache-Aside pattern on `GET /tasks` (`X-Cache: HIT|MISS|BYPASS`), single-task document caching, write invalidation (`POST`, `PUT`, `DELETE`), interactive 3x latency benchmark UI (~18x speedup). | ✅ Complete |
 | **[`10/`](./10)** | **Practical 10** | **Event-Driven Architecture (EventEmitter)** | Node.js native `EventEmitter` singleton, non-blocking background notification worker (`task-created`), background audit archival listener (`task-deleted`), safe error event handler, live event stream card & timestamp proof. | ✅ Complete |
+| **[`11/`](./11)** | **Practical 11** | **Containerization with Docker & Compose** | Multi-container Docker Compose orchestration (`frontend:5173`, `backend:5000`, `mongodb:27017`), multi-stage frontend Dockerfile, bridge network (`app-network`), persistent named volume (`mongo-data`), `.dockerignore`, `DockerArchitectureCard.tsx`. | ✅ Complete |
+| **[`12/`](./12)** | **Practical 12** | **CI/CD Pipeline with GitHub Actions** | Automated CI pipeline (`.github/workflows/ci.yml`), multi-job staging (`lint` -> `test` -> `build`), live MongoDB service container in CI, deliberate failure demo vs fixed passing run (`npm run test:fail`), CI badge, `CiCdPipelineCard.tsx`. | ✅ Complete |
+| **[`13/`](./13)** | **Practical 13** | **AI API Integration & Responsible AI** | Google Gemini / OpenAI external AI service integration, **Strict Graceful Degradation** on failure/timeout (status 200 fallback guarantee), server-only API keys (.env), 60s rate limiting, human-in-the-loop review, `AiAssistantCard.tsx`. | ✅ Complete |
 
 ---
 
@@ -56,6 +59,15 @@ Practical 9: + In-Memory Caching with node-cache (Cache-Aside & Invalidation)
      │
      ▼
 Practical 10: + Asynchronous Processing with Event-Driven Architecture (EventEmitter)
+     │
+     ▼
+Practical 11: + Multi-Container Architecture (Docker Compose: React + Node + MongoDB)
+     │
+     ▼
+Practical 12: + CI/CD Pipeline Automation (GitHub Actions: Lint -> Test -> Build)
+     │
+     ▼
+Practical 13: + Generative AI API Integration (Gemini / OpenAI with Graceful Degradation)
 ```
 
 ---
@@ -71,7 +83,10 @@ Practical 10: + Asynchronous Processing with Event-Driven Architecture (EventEmi
 | **Authentication** | JSON Web Tokens (`jsonwebtoken`), Password Hashing (`bcryptjs`) |
 | **Caching Engine** | In-Memory `node-cache` with automatic 60s TTL eviction |
 | **Event Subsystem** | Node.js Native `EventEmitter` (Non-blocking background processing) |
-| **Testing & Tooling** | Automated test suites (`test-api.js`), VS Code REST Client (`test.http`), concurrently |
+| **Containerization** | Docker, Docker Compose, Multi-stage builds, Bridge networks (`app-network`), Persistent volumes (`mongo-data`) |
+| **CI/CD Automation** | GitHub Actions (`.github/workflows/ci.yml`), Multi-job pipelines, MongoDB service containers |
+| **AI Integration** | Google Gemini API (`@google/genai` / REST), OpenAI API, Graceful Degradation Engine, Rate Limiting |
+| **Testing & Tooling** | Automated test suites (`test-ci.js`, `test-api.js`), VS Code REST Client (`test.http`), concurrently |
 
 ---
 

@@ -112,9 +112,44 @@ This repository (`PROJECT-ADVWEB`) follows a **progressive cumulative practical 
   - Frontend interactive Event Telemetry Stream card (`EventNotificationCard.tsx`) with live polling, metrics grid, and slow-worker countdown banner.
   - Automated 27-point test suite (`test-api.js`) verifying non-blocking timestamp ordering and REST Client collection (`test.http`).
 
+### 11. [Folder `11/`](file:///d:/SEM-5/PROJECT-ADVWEB/11) — Practical 11 (Practical 1 to 10 + Containerization with Docker & Compose)
+- **Topic**: Multi-Container Architecture & Containerization (Docker + Docker Compose).
+- **Includes**: Everything from Practical 1 to 10 PLUS:
+  - Multi-stage frontend Dockerfile (`Dockerfile.frontend`) with build stage and Vite preview runner on port 5173.
+  - Minimal Node.js 18 Alpine backend Dockerfile (`Dockerfile.backend`) on port 5000.
+  - Multi-container orchestration (`docker-compose.yml`) defining `frontend`, `backend`, and `mongodb`.
+  - User-defined internal bridge network (`app-network`) with automatic service DNS resolution (`mongodb://mongodb:27017/taskdb`).
+  - Named persistent volume (`mongo-data`) mounted at `/data/db` ensuring data durability across container restarts.
+  - Context optimization via `.dockerignore` excluding `node_modules`, `dist`, `.env`.
+  - Full-stack React 19 interactive topology visualizer (`DockerArchitectureCard.tsx`) with live container health telemetry (`GET /api/docker/status`).
+  - Automated 28-point container test runner (`test-api.js`) and REST Client collection (`test.http`).
+
+### 12. [Folder `12/`](file:///d:/SEM-5/PROJECT-ADVWEB/12) — Practical 12 (Practical 1 to 11 + CI/CD Pipeline with GitHub Actions)
+- **Topic**: Continuous Integration and Automated Delivery Pipelines (GitHub Actions).
+- **Includes**: Everything from Practical 1 to 11 PLUS:
+  - Declarative GitHub Actions CI pipeline (`.github/workflows/ci.yml`) triggering on `push` and `pull_request` to `main`.
+  - Multi-job pipeline staging: static code linting (`lint`) before test execution (`build-and-test`).
+  - Isolated live MongoDB service container (`mongo:6`) in GitHub runner for full-stack integration testing.
+  - Automated CI test suite (`test-ci.js`) with `--deliberate-fail` flag demonstrating failed pipeline (Red X) and fixed pipeline (Green Checkmark).
+  - Status badge integration preview in project README.
+  - Frontend interactive CI/CD Pipeline Simulator card (`CiCdPipelineCard.tsx`) with streaming execution log terminal.
+  - Production build verification and Docker Compose configuration syntax validation (`docker compose config`).
+
+### 13. [Folder `13/`](file:///d:/SEM-5/PROJECT-ADVWEB/13) — Practical 13 (Practical 1 to 12 + AI API Integration & Responsible AI)
+- **Topic**: Generative AI Service Integration and Responsible AI Engineering (Gemini / OpenAI API).
+- **Includes**: Everything from Practical 1 to 12 PLUS:
+  - External Generative AI API integration (`services/aiService.js`) supporting Google Gemini API and OpenAI API.
+  - **Strict Graceful Degradation Pattern**: External API calls wrapped with 5s timeout and automatic fallback to domain-aware heuristic engine returning status 200 without crashing.
+  - Server-side secret isolation: API keys stored strictly in `.env`, never exposed to the frontend browser.
+  - Meaningful AI endpoints: `POST /api/ai/generate-description`, `POST /api/ai/suggest-priority`, and `POST /api/ai/suggest-subtasks`.
+  - In-memory rate limiting enforcing a 60-second cooldown per client to prevent quota drain.
+  - Human-in-the-loop review: suggestions delivered as editable inputs with prominent Responsible AI Disclaimer Banners.
+  - Interactive AI Assistant card (`AiAssistantCard.tsx`) with live prompt playground and Graceful Degradation simulation trigger.
+  - Automated 29-point test suite (`test-api.js`) and REST Client collection (`test.http`).
+
 ---
 
-## 🚀 Instructions for Future Practicals (Folder `11/`, etc.)
+## 🚀 Instructions for Future Practicals (Folder `14/`, etc.)
 
 Whenever creating or working on a new practical folder `N`:
 1. **Initialize Baseline**: Copy the complete working codebase from folder `N-1` into the new folder `N`.

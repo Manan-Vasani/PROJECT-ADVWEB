@@ -1,0 +1,30 @@
+# Practical 11: Backend Node.js & Express Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy dependency manifests
+COPY package*.json ./
+
+# Install production dependencies
+RUN npm install
+
+# Copy backend code, models, services, events, and configuration
+COPY server.js ./
+COPY models/ ./models/
+COPY middleware/ ./middleware/
+COPY services/ ./services/
+COPY events/ ./events/
+COPY public/ ./public/
+COPY .env.example ./.env.example
+
+# Set environment defaults
+ENV PORT=5000
+ENV NODE_ENV=production
+ENV DOCKER_CONTAINER=true
+
+# Expose backend REST port
+EXPOSE 5000
+
+# Start server
+CMD ["node", "server.js"]

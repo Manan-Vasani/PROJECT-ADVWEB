@@ -1,0 +1,20 @@
+{
+  "name": "task-manager-api",
+  "version": "1.0.0",
+  "description": "Practical 9 - Task Manager RESTful API with In-Memory Caching and Query Optimization",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.9.3",
+    "node-cache": "^5.1.2"
+  }
+}

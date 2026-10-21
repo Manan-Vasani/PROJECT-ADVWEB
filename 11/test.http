@@ -1,0 +1,78 @@
+### Practical 11: Containerization with Docker and Docker Compose
+### REST Client Test Suite
+
+@baseUrl = http://localhost:5000
+
+### 1. Root Metadata & Container Topology Inspection
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. Live Docker Environment Telemetry
+GET {{baseUrl}}/api/docker/status
+Accept: application/json
+
+### 3. Clear Cache & Event Logs
+POST {{baseUrl}}/api/cache/clear
+
+###
+POST {{baseUrl}}/api/events/clear
+
+### 4. Register Container Developer Account
+# @name registerUser
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Docker Orchestrator",
+  "email": "docker_pilot@charusat.edu.in",
+  "password": "Password123!"
+}
+
+### 5. Login to Acquire JWT Token
+# @name loginUser
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "docker_pilot@charusat.edu.in",
+  "password": "Password123!"
+}
+
+### Store token from login
+@authToken = {{loginUser.response.body.token}}
+
+### 6. Verify Authenticated Profile
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+
+### 7. Create Task in Containerized MongoDB
+# @name createTask
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Verify Docker Compose Multi-Container Stack",
+  "description": "Ensure inter-container bridge network routes backend requests to mongodb service",
+  "priority": "high"
+}
+
+@taskId = {{createTask.response.body._id}}
+
+### 8. Fetch Tasks (Tests In-Memory Caching in Container)
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{authToken}}
+
+### 9. Update Task
+PUT {{baseUrl}}/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "completed": true,
+  "priority": "medium"
+}
+
+### 10. Delete Task
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{authToken}}

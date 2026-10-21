@@ -1,22 +1,24 @@
 ### Practical 7: Authentication & Middleware Pipeline REST Client Tests
 @baseUrl = http://localhost:5000
 
-### 1. Server Health Check
+### 1. Server Health Check (Returns 200 OK)
 GET {{baseUrl}}/
 Accept: application/json
 
-### 2. Register New User (Valid)
+### 2. Register New User (Returns 201 Created)
+# Tip: If this returns 400 "already exists", either change the email below (e.g. manan1@charusat.edu.in) 
+# or jump directly to Request #4 (Login) which returns 200 OK!
 # @name register
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
   "name": "Manan Vasani",
-  "email": "manan@charusat.edu.in",
+  "email": "manan1@charusat.edu.in",
   "password": "password123"
 }
 
-### 3. Register Validation Failure (Short Password < 6 chars)
+### 3. Register Validation Failure (Testing 400 Bad Request - Password < 6 chars)
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -26,7 +28,8 @@ Content-Type: application/json
   "password": "123"
 }
 
-### 4. Login User
+### 4. Login User (Returns 200 OK & JWT Token)
+# CLICK SEND REQUEST HERE TO GET YOUR 200 OK SCREENSHOT!
 # @name login
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -36,22 +39,24 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### 5. Attempt Protected Route WITHOUT Token (Expected: 401 Unauthorized)
+### 5. Attempt Protected Route WITHOUT Token (Testing 401 Unauthorized)
+# CLICK SEND REQUEST HERE TO GET YOUR 401 UNAUTHORIZED SCREENSHOT!
 GET {{baseUrl}}/tasks
 Accept: application/json
 
-### 6. Get Current User Profile (Using JWT)
+### 6. Get Current User Profile (Returns 200 OK with Bearer Token)
 @authToken = {{login.response.body.token}}
 GET {{baseUrl}}/api/auth/me
 Authorization: Bearer {{authToken}}
 Accept: application/json
 
-### 7. Get Tasks (Authenticated)
+### 7. Get Tasks (Returns 200 OK with Bearer Token)
+# CLICK SEND REQUEST HERE TO GET YOUR PROTECTED 200 OK SCREENSHOT!
 GET {{baseUrl}}/tasks
 Authorization: Bearer {{authToken}}
 Accept: application/json
 
-### 8. Create Task (Authenticated)
+### 8. Create Task (Returns 201 Created with Bearer Token)
 # @name createTask
 POST {{baseUrl}}/tasks
 Authorization: Bearer {{authToken}}
@@ -64,7 +69,7 @@ Content-Type: application/json
   "completed": false
 }
 
-### 9. Task Validation Failure (Missing Title)
+### 9. Task Validation Failure (Testing 400 Bad Request - Missing Title)
 POST {{baseUrl}}/tasks
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
@@ -73,7 +78,7 @@ Content-Type: application/json
   "description": "This should fail because title is required"
 }
 
-### 10. Update Task by ID
+### 10. Update Task by ID (Returns 200 OK)
 @taskId = {{createTask.response.body._id}}
 PUT {{baseUrl}}/tasks/{{taskId}}
 Authorization: Bearer {{authToken}}
@@ -84,16 +89,7 @@ Content-Type: application/json
   "priority": "medium"
 }
 
-### 11. Delete Task by ID
+### 11. Delete Task by ID (Returns 200 OK)
 DELETE {{baseUrl}}/tasks/{{taskId}}
 Authorization: Bearer {{authToken}}
-Accept: application/json
-
-### 12. Test CastError for Invalid ObjectId
-GET {{baseUrl}}/tasks/invalid-id-123
-Authorization: Bearer {{authToken}}
-Accept: application/json
-
-### 13. Test 500 Global Error Handler
-GET {{baseUrl}}/error-test
 Accept: application/json
